@@ -1,3 +1,5 @@
+'''LABKAAA'''
+
 from typing import Callable
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,19 +15,18 @@ print(f"+++ Номер функції: {assigned_function} +++")
 e = np.e
 x = sp.Symbol('x')
 func_for_taylor = sp.sqrt(x) * sp.exp(-x / 3)
-
 function_expr = lambda x: np.sqrt(x) * np.exp(-x / 3)
-
-# draw func
 function = sp.sqrt(x) * sp.exp(-x / 3)
-x_values = np.linspace(0, 20, 400)
-y_values = function_expr(x_values)
 
-plt.plot(x_values, y_values)
-plt.xlabel("x")
-plt.ylabel("y")
-plt.grid(True)
-plt.show()
+def draw_func():
+    x_values = np.linspace(0, 20, 400)
+    y_values = function_expr(x_values)
+
+    plt.plot(x_values, y_values)
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.grid(True)
+    plt.show()
 
 
 def numeric_derivative(func: Callable[[float], float], x: float, h: float = 1e-7) -> float:
@@ -85,7 +86,7 @@ def analyze_derivatives(function: sp.Expr,
           f"{max_error_default:.3}")
     print("Максимальна похибка (за формулою центральної різниці):",
           f"{max_error_central:.3}")
-    
+
     if max_error_default > max_error_central:
         print("Краще використовувати - формулу центральної різниці.")
     elif max_error_default < max_error_central:
@@ -125,9 +126,9 @@ def get_taylor_poly(x0: float, n: int):
     return taylor_func
 #print(get_taylor_poly(0.6, 3))
 
-def bisection_method(func: Callable[[float], float], 
-                       a: float, 
-                       b: float, 
+def bisection_method(func: Callable[[float], float],
+                       a: float,
+                       b: float,
                        tol: float = 1e-8) -> float:
     """
     Знаходить корінь похідної f'(x) на інтервалі [a, b] методом бісекції.
@@ -158,9 +159,9 @@ def bisection_method(func: Callable[[float], float],
             a = c
     return (a + b) / 2
 
-def golden_section_search(func: Callable[[float], float], 
-                          a: float, 
-                          b: float, 
+def golden_section_search(func: Callable[[float], float],
+                          a: float,
+                          b: float,
                           tol: float = 1e-8) -> float:
     """
     Знаходить мінімум унімодальної функції f(x) на інтервалі [a, b]
@@ -172,7 +173,7 @@ def golden_section_search(func: Callable[[float], float],
     :param tol: точність (критерій зупинки)
     :return: x, що мінімізує f(x) на [a, b]
     """
-    gr = (np.sqrt(5) + 1) / 2 
+    gr = (np.sqrt(5) + 1) / 2
     c = b - (b - a) / gr
     d = a + (b - a) / gr
     while abs(b - a) > tol:
@@ -185,9 +186,9 @@ def golden_section_search(func: Callable[[float], float],
 
     return (b + a) / 2
 
-def newtons_method(func: Callable[[float], float], 
-                   x0: float, 
-                   tol: float = 1e-8, 
+def newtons_method(func: Callable[[float], float],
+                   x0: float,
+                   tol: float = 1e-8,
                    max_iter: int = 100) -> float:
     """
     Знаходить корінь похідної f'(x) методом Ньютона (методом дотичних).
@@ -202,30 +203,18 @@ def newtons_method(func: Callable[[float], float],
     x = sp.Symbol('x')
     func_expr = func(x) if isinstance(func(x), sp.Basic) else sp.sympify(func(x))
     dfdx_expr = sp.diff(func_expr, x)
-    d2fdx2_expr = sp.diff(dfdx_expr, x)    
+    d2fdx2_expr = sp.diff(dfdx_expr, x)
     f_prime = sp.lambdify(x, dfdx_expr, 'numpy')
     f_double_prime = sp.lambdify(x, d2fdx2_expr, 'numpy')
     xn = x0
     for _ in range(max_iter):
         f1 = f_prime(xn)
         f2 = f_double_prime(xn)
-        
-        if f2 == 0:  # щоб уникнути ділення на нуль
+        if f2 == 0:
             return "Друга похідна стала нулем, метод Ньютона не працює."
-        
         xn_new = xn - f1 / f2
-        
         if abs(xn_new - xn) < tol:
             return xn_new
-        
         xn = xn_new
-    
-    # Якщо не збіглися за max_iter
+
     return 'Не збіглись за max_iter'
-
-
-
-
-
-
-
