@@ -102,7 +102,7 @@ def bisection_method(func: Callable[[float], float],
 
     # Перевірка, що на межах знак змінюється
     if dfdx(a) * dfdx(b) > 0:
-        raise ValueError("Функція похідної має однаковий знак на кінцях інтервалу. Метод бісекції не спрацює.")
+        return "Функція похідної має однаковий знак на кінцях інтервалу. Метод бісекції не спрацює."
 
     # Бісекція
     while (b - a) / 2 > tol:
@@ -129,17 +129,14 @@ def golden_section_search(func: Callable[[float], float],
     :param tol: точність (критерій зупинки)
     :return: x, що мінімізує f(x) на [a, b]
     """
-    gr = (np.sqrt(5) + 1) / 2  # золотий перетин
+    gr = (np.sqrt(5) + 1) / 2 
     c = b - (b - a) / gr
     d = a + (b - a) / gr
-
     while abs(b - a) > tol:
         if func(c) < func(d):
             b = d
         else:
             a = c
-
-        # Оновлюємо c та d
         c = b - (b - a) / gr
         d = a + (b - a) / gr
 
@@ -160,22 +157,18 @@ def newtons_method(func: Callable[[float], float],
     :return: x, що є коренем f'(x) (точка екстремуму)
     """
     x = sp.Symbol('x')
-    # Перетворимо func у sympy-вираз
     func_expr = func(x) if isinstance(func(x), sp.Basic) else sp.sympify(func(x))
     dfdx_expr = sp.diff(func_expr, x)
-    d2fdx2_expr = sp.diff(dfdx_expr, x)
-    
-    # Функції для обчислень
+    d2fdx2_expr = sp.diff(dfdx_expr, x)    
     f_prime = sp.lambdify(x, dfdx_expr, 'numpy')
     f_double_prime = sp.lambdify(x, d2fdx2_expr, 'numpy')
-    
     xn = x0
     for _ in range(max_iter):
         f1 = f_prime(xn)
         f2 = f_double_prime(xn)
         
         if f2 == 0:  # щоб уникнути ділення на нуль
-            raise ZeroDivisionError("Друга похідна стала нулем, метод Ньютона не працює.")
+            return "Друга похідна стала нулем, метод Ньютона не працює."
         
         xn_new = xn - f1 / f2
         
@@ -185,7 +178,7 @@ def newtons_method(func: Callable[[float], float],
         xn = xn_new
     
     # Якщо не збіглися за max_iter
-    raise RuntimeError(f"Метод Ньютона не збігся після {max_iter} ітерацій")
+    return 'Не збіглись за max_iter'
 
 
 
