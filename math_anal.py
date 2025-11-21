@@ -50,6 +50,49 @@ def numeric_derivative_cd(func: Callable[[float], float], x: float, h: float = 1
     derivative_cd = (func(x + h) - func(x - h)) / (2*h)
     return derivative_cd
 
+def analyze_derivatives(function: sp.Expr,
+                        x_symbol: sp.Symbol,
+                        a: float,
+                        b: float,
+                        step: float = 0.1,
+                        h: float = 1e-7) -> None:
+    """
+    Порівнює точність numeric_derivative і numeric_derivative_cd
+    на інтервалі [a, b] з кроком step.
+    Виводить максимальні похибки для обох методів, а також вибирає який буде кращий.
+    """
+    f_num = sp.lambdify(x_symbol, function, "numpy")
+    derivative_sym = sp.diff(function, x_symbol)
+    f_derivative = sp.lambdify(x_symbol, derivative_sym, "numpy")
+
+    x_range = np.arange(a, b + step, step)
+
+    errors_default = []
+    errors_central = []
+
+    for x in x_range:
+        true_val = float(f_derivative(x))
+        approx_default = numeric_derivative(f_num, x, h)
+        approx_central = numeric_derivative_cd(f_num, x, h)
+
+        errors_default.append(abs(approx_default - true_val))
+        errors_central.append(abs(approx_central - true_val))
+
+    max_error_default = max(errors_default)
+    max_error_central = max(errors_central)
+
+    print("Максимальна похибка (за означенням похідної):",
+          f"{max_error_default:.3}")
+    print("Максимальна похибка (за формулою центральної різниці):",
+          f"{max_error_central:.3}")
+    
+    if max_error_default > max_error_central:
+        print("Краще використовувати - формулу центральної різниці.")
+    elif max_error_default < max_error_central:
+        print("Краще використовувати - формулу означення похідної.")
+    else:
+        print("За двома формулами однакова похибка, отже можна використовувати, що ту, що іншу.")
+
 def numeric_second_derivative(func: Callable[[float], float], x: float, h: float = 1e-5) -> float:
     """
     Обчислює другу похідну за формулою центральної різниці.
