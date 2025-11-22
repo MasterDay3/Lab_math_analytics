@@ -97,6 +97,18 @@ def get_taylor_poly(x0: float, n: int):
     taylor_func = sp.lambdify(x, taylor_row, 'numpy')
     return taylor_func
 
+def taylor_poly_visualisation(poly):
+    '''
+    Візуалізує введений поліном Тейлора
+    '''
+    x_values = np.linspace(0, 20, 400)
+    y_values = poly(x_values)
+
+    plt.plot(x_values, y_values, label='Поліном Тейлора')
+    plt.grid(True)
+    plt.title('Візуалізація полінома Тейлора')
+    plt.show()
+
 def bisection_method(func: Callable[[float], float],
                        a: float,
                        b: float,
@@ -190,3 +202,18 @@ def compare_optimization_methods():
 
 
 #compare_optimization_methods()
+#draw_func()
+#print(numeric_derivative(lambda t: t**2, 3.0))
+#print(numeric_derivative_cd(lambda t: t**2, 3.0))
+# x = sp.Symbol('x')
+# f = x**2
+# print(analyze_derivatives(f, x, 0.0, 1.0, step=0.5, h=1e-5))
+#print(numeric_second_derivative(lambda t: t**3, 1.0))
+# f = lambda x: -(x - 1)**2 + 5   # максимум у точці x = 1
+# print(golden_section_search(f, -2.0, 4.0, tol=1e-6))
+# x_opt = newtons_method(function_expr, 2.0, tol=1e-8, max_iter=50)
+# print(x_opt)
+#compare_optimization_methods()
+#print(taylor_poly_visualisation(get_taylor_poly(0.6, 3)))
+#print(get_taylor_poly(0.6, 3))
+
