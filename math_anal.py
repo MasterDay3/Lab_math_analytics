@@ -126,6 +126,19 @@ def get_taylor_poly(x0: float, n: int):
     return taylor_func
 #print(get_taylor_poly(0.6, 3))
 
+def taylor_poly_visualisation(poly):
+    '''
+    Візуалізує введений поліном Тейлора
+    '''
+    x_values = np.linspace(0, 20, 400)
+    y_values = poly(x_values)
+
+    plt.plot(x_values, y_values, label='Поліном Тейлора')
+    plt.grid(True)
+    plt.title('Візуалізація полінома Тейлора')
+    plt.show()
+#print(taylor_poly_visualisation(get_taylor_poly(0.6, 3)))
+
 def bisection_method(func: Callable[[float], float],
                        a: float,
                        b: float,
