@@ -197,7 +197,7 @@ def compare_optimization_methods():
     err_new = abs(res_new - true_extremum)
     print("Метод                 Результат     Похибка   Час виконання (s)")
     print(f"{'Бісекція':<20} {res_bi:<12.8f} {err_bi:<12.2e} {t_bi:.6f}")
-    print(f"{'Золотий перетин':<20} {res_gold:<12.8f} | {err_gold:.2e} | {t_gold:.6f}")
+    print(f"{'Золотий перетин':<20} {res_gold:<12.8f}  {err_gold:.2e}  {t_gold:.6f}")
     print(f"{'Ньютон':<20} {res_new:<12.8f} {err_new:<12.2e} {t_new:.6f}")
 
 
